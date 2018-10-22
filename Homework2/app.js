@@ -32,7 +32,7 @@
                        {name: "Milk", quantity: 1},
                        {name: "Chips", quantity: 2},
                        {name: "Beer", quantity: 12},
-                       {name: "Coffee", quantity: 1}];
+                       {name: "Tea", quantity: 1}];
      var itemsBought = [];
 
      service.itemsToBuy = function(){
