@@ -1,0 +1,9 @@
+<div class="row" ng-repeat="item in menuDirective.foundMenuItems">
+    <div class="col-xs-6">
+      <found-item></found-item>
+    </div>
+    <div class="col-xs-6">
+      <button class="btn btn-primary" type="button" ng-click="menuDirective.onRemoveMenuItem({arg1: $index})">Remove Menu Item</button>
+      <button class="btn btn-primary" type="button" ng-click="menuDirective.onTest({arg1: $index})">Remove Menu Item</button>
+    </div>
+</div>
