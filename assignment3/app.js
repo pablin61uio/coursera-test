@@ -5,12 +5,13 @@
   .controller('NarrowItDownController', NarrowItDownController)
   //.controller('FoundMenuItemsDirectiveController', FoundMenuItemsDirectiveController)
   .service('MenuSearchService', MenuSearchService)
+  .constant('apiUrl','https://davids-restaurant.herokuapp.com/menu_items.json')
   .directive('foundItem', FoundItem)
   .directive('foundItems', FoundItems);
 
   function FoundItem(){
     var ddo = {
-        template: '{{item.name}}'
+        template: '{{item.name}}, {{item.description}}'
     };
     return ddo;
   }
@@ -51,6 +52,11 @@
      narrowCtrl.statusText = "OK";
 
      narrowCtrl.getMatchedMenuItems = function(){
+        if (narrowCtrl.searchTerm.trim() === ''){
+          narrowCtrl.found = [];
+          narrowCtrl.statusText = 'Nothing Found';
+          return;
+        }
         promise = MenuSearchService.getMatchedMenuItems(narrowCtrl.searchTerm);
         promise.then(handleMatchedMenuItems)
         .catch(handleMatchedMenuItems);
@@ -67,24 +73,29 @@
      }
 
      function handleMatchedMenuItems(data){
-       narrowCtrl.found = data.matchedMenuItems;
-       narrowCtrl.statusText = data.statusText;
+       if (data.matchedMenuItems.length === 0){
+         narrowCtrl.found = data.matchedMenuItems;
+         narrowCtrl.statusText = 'Nothing Found';
+       } else {
+         narrowCtrl.found = data.matchedMenuItems;
+         narrowCtrl.statusText = data.statusText;
+       }
        console.log('handle', narrowCtrl.found);
      };
 
   };
 
-  MenuSearchService.$inject = ["$http","$filter","$q"];
-  function MenuSearchService($http, $filter, $q){
+  MenuSearchService.$inject = ["$http","$filter","$q", "apiUrl"];
+  function MenuSearchService($http, $filter, $q, apiUrl){
     var service = this;
     //var deferred = $q.defer();
 
     service.getMatchedMenuItems = function(searchTerm){
       return $http({method:'GET',
-                 url:'https://davids-restaurant.herokuapp.com/menu_items.json'})
+                 url: apiUrl})
             .then(function (response) {
                   // process result and only keep items that match
-                  var foundItems = $filter('filter')(response.data.menu_items, {name: searchTerm})
+                  var foundItems = $filter('filter')(response.data.menu_items, {description: searchTerm})
                   // return processed items
                   return {matchedMenuItems:foundItems,
                           statusText: response.statusText};
