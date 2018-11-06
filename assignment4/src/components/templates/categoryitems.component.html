@@ -1,0 +1,16 @@
+<div class="">
+  <h3>Category: {{$ctrl.categoryItems.category.name}}</h3>
+</div>
+<div class="" ng-repeat="item in $ctrl.categoryItems.menu_items">
+    <div class="">
+        Name: {{item.name}}
+    </div>
+    <div class="">
+        Description: {{item.description}}
+    </div>
+    <div class="">
+        Price Small: {{item.price_small}}  <br>
+        Price Large: {{item.price_large}}
+    </div>
+    <hr>
+</div>
